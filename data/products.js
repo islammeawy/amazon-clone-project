@@ -656,5 +656,21 @@ const products = [
       "apparel",
       "mens"
     ]
+  },
+  {
+    id: "f3e2d1b1-2f3a-4e2e-8f0c-2d3e4b5c6d7e",
+    image: "images/products/variations/adults-plain-cotton-tshirt-2-pack-plus-black.jpg",
+    name: "Men's Full-Zip Hooded Fleece Sweatshirt",
+    rating: {
+      stars: 5,
+      count: 90
+    },
+    priceCents: 6776,
+    keywords: [
+      "sweaters",
+      "hoodies",
+      "apparel",
+      "mens"
+    ]
   }
 ];
