@@ -23,7 +23,7 @@ products.forEach((product) => {
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class ="js-quantity-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -63,7 +63,7 @@ document.querySelectorAll('.add-to-cart-button').forEach((button) => {
       }
     });
 
-    const quantity = parseInt(
+    const quantity = Number(
       button.parentElement.querySelector('.product-quantity-container select').value
     );
 
