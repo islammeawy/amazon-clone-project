@@ -60,7 +60,12 @@ products.forEach((product) => {
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
 function updateCartQuantity() {
-  let cartQuantity = 0;
+  if (!cart){
+    document.querySelector('.js-cart-quantity')
+      .innerHTML = '';
+    return;
+  }
+  let cartQuantity = null;
 
   cart.forEach((cartItem) => {
     cartQuantity += cartItem.quantity;
@@ -96,3 +101,6 @@ document.querySelectorAll('.js-add-to-cart')
       }, 2000);
     });
   });
+
+// Optional: If you want to update cart quantity on page load
+updateCartQuantity();
