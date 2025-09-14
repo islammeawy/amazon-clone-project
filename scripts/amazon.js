@@ -1,4 +1,4 @@
-import {cart, addToCart} from '../data/cart.js';
+import {cart, addToCart, calculateCartQuantity} from '../data/cart.js';
 import {products} from '../data/products.js';
 import {formatCurrency} from './utils/money.js';
 
@@ -65,12 +65,7 @@ function updateCartQuantity() {
       .innerHTML = '';
     return;
   }
-  let cartQuantity = null;
-
-  cart.forEach((cartItem) => {
-    cartQuantity += cartItem.quantity;
-  });
-
+  const cartQuantity = calculateCartQuantity();
   document.querySelector('.js-cart-quantity')
     .innerHTML = cartQuantity;
 }
@@ -79,11 +74,20 @@ document.querySelectorAll('.js-add-to-cart')
   .forEach((button) => {
     button.addEventListener('click', () => {
       const productId = button.dataset.productId;
-      addToCart(productId);
+      const productContainer = button.closest('.product-container');
+      const productQuantity = parseInt(productContainer.querySelector('select').value, 10);
+      
+      // Validate that quantity is a valid number
+      if (isNaN(productQuantity) || productQuantity <= 0) {
+        console.error('Invalid quantity:', productContainer.querySelector('select').value);
+        return;
+      }
+      
+      addToCart(productId, productQuantity);
       updateCartQuantity();
       
       // Show checkmark animation
-      const productContainer = button.closest('.product-container');
+    
       const addedToCartElement = productContainer.querySelector('.added-to-cart');
       
       // Clear any existing timeout to prevent multiple timeouts
