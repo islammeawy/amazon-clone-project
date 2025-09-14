@@ -209,3 +209,17 @@
   margin-top: 11px;
   margin-bottom: 15px;
 }
+.quantity-input{
+  display: none;
+  width: 50px;
+  margin-left: 10px;
+  text-align: center;
+  font-size: 16px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.save-quantity-link{
+  display: none;
+  margin-left: 10px;
+}

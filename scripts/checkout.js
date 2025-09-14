@@ -42,8 +42,12 @@ cart.forEach((cartItem) => {
             <span>
               Quantity: <span class="quantity-label">${cartItem.quantity}</span>
             </span>
-            <span class="update-quantity-link link-primary">
+            <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchingProduct.id}">
               Update
+            </span>
+            <input class="quantity-input js-quantity-input-${matchingProduct.id}" type="number" min="1" value="${cartItem.quantity}" data-product-id="${matchingProduct.id}">
+            <span class ="save-quantity-link link-primary js-save-link" data-product-id="${matchingProduct.id}">
+              Save
             </span>
             <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingProduct.id}">
               Delete
@@ -118,6 +122,60 @@ document.querySelectorAll('.js-delete-link')
       updateCheckoutHeader();
     });
   });
+document.querySelectorAll('.js-update-link')
+  .forEach((link) => {
+    link.addEventListener('click', () => {
+      const productId = link.dataset.productId;
+      
+      // Hide the update link and show the input field and save link
+      link.style.display = 'none';
+      document.querySelector(`.js-quantity-input-${productId}`).style.display = 'inline-block';
+      document.querySelector(`.js-save-link[data-product-id="${productId}"]`).style.display = 'inline-block';
+    });
+  });
+
+// Add save functionality
+document.querySelectorAll('.js-save-link')
+  .forEach((link) => {
+    link.addEventListener('click', () => {
+      const productId = link.dataset.productId;
+      const quantityInput = document.querySelector(`.js-quantity-input-${productId}`);
+      const newQuantity = parseInt(quantityInput.value, 10);
+      
+      // Validate the new quantity
+      if (isNaN(newQuantity) || newQuantity <= 0 || newQuantity > 99) {
+        alert('Please enter a valid quantity');
+        return;
+      }
+      
+      // Update the cart
+      const cartItem = cart.find(item => item.productId === productId);
+      if (cartItem) {
+        cartItem.quantity = newQuantity;
+        // Save to localStorage
+        localStorage.setItem('cart', JSON.stringify(cart));
+        
+        // Update the quantity label
+        document.querySelector(`.js-cart-item-container-${productId} .quantity-label`).textContent = newQuantity;
+        
+        // Hide the input and save link, show the update link
+        quantityInput.style.display = 'none';
+        link.style.display = 'none';
+        document.querySelector(`.js-update-link[data-product-id="${productId}"]`).style.display = 'inline-block';
+        
+        // Update the checkout header
+        updateCheckoutHeader();
+      }
+    });
+  });
+
+// Hide input fields and save links by default
+document.querySelectorAll('.js-quantity-input, .js-save-link')
+  .forEach((element) => {
+    element.style.display = 'none';
+  });
+
+
 
 // Call the function when the page loads
 updateCheckoutHeader();
