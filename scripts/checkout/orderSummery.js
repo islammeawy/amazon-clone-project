@@ -1,11 +1,12 @@
 import {calculateCartQuantity, cart, removeFromCart, updateDeliveryOptionsId} from '../../data/cart.js';
-import {products} from '../../data/products.js';
+import {products, getProduct} from '../../data/products.js';
 import {formatCurrency} from '../utils/money.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
-import {deliveryOptions} from '../../data/deliveryOptions.js'
+import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js'
+import {renderPaymentSummary} from './paymentSummery.js';
 
 function getDeliveryDate(deliveryOptionsId) {
-  const option = deliveryOptions.find(option => option.id === deliveryOptionsId);
+  const option = getDeliveryOption(deliveryOptionsId);
   if (!option) return 'Delivery date: TBD';
   
   const today = dayjs();
@@ -70,13 +71,8 @@ export function renderCheckoutPage() {
 
   cart.forEach((cartItem) => {
     const productId = cartItem.productId;
-    let matchingProduct;
+    const matchingProduct = getProduct(productId);
 
-    products.forEach((product) => {
-      if (product.id === productId) {
-        matchingProduct = product;
-      }
-    });
 
     cartSummaryHTML += `
       <div class="cart-item-container
@@ -216,7 +212,10 @@ export function renderCheckoutPage() {
         const deliveryDateElement = document.querySelector(`.js-cart-item-container-${productId} .delivery-date`);
         if (deliveryDateElement) {
           deliveryDateElement.textContent = getDeliveryDate(deliveryOptionsId);
+
+
         }
+        renderPaymentSummary();
       });
     });
 }
