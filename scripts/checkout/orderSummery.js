@@ -144,6 +144,7 @@ export function renderCheckoutPage() {
         
         // Update the checkout header after deletion
         updateCheckoutHeader();
+        renderPaymentSummary();
       });
     });
   document.querySelectorAll('.js-update-link')
@@ -155,6 +156,7 @@ export function renderCheckoutPage() {
         link.style.display = 'none';
         document.querySelector(`.js-quantity-input-${productId}`).style.display = 'inline-block';
         document.querySelector(`.js-save-link[data-product-id="${productId}"]`).style.display = 'inline-block';
+        renderPaymentSummary();
       });
     });
 
@@ -189,6 +191,7 @@ export function renderCheckoutPage() {
           
           // Update the checkout header
           updateCheckoutHeader();
+          renderPaymentSummary();
         }
       });
     });

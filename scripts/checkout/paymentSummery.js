@@ -35,24 +35,40 @@ export function renderPaymentSummary() {
     const taxCents = totalBeforeTaxCents * 0.1;
     const totalCents = totalBeforeTaxCents + taxCents;
 
-    console.log('Payment Summary:', {
-        productPriceCents,
-        shippingPriceCents,
-        totalBeforeTaxCents,
-        taxCents,
-        totalCents
-    });
+  
+    const paymentSummaryHTML = ` <div class="payment-summary-title">
+            Order Summary
+          </div>
 
-    // Update the payment summary in the DOM
-    const itemsElement = document.querySelector('.payment-summary-row:nth-child(2) .payment-summary-money');
-    const shippingElement = document.querySelector('.payment-summary-row:nth-child(3) .payment-summary-money');
-    const subtotalElement = document.querySelector('.payment-summary-row:nth-child(4) .payment-summary-money');
-    const taxElement = document.querySelector('.payment-summary-row:nth-child(5) .payment-summary-money');
-    const totalElement = document.querySelector('.payment-summary-row:nth-child(6) .payment-summary-money');
+          <div class="payment-summary-row">
+            <div>Items (${cart.length}):</div>
+            <div class="payment-summary-money">${formatCurrency(productPriceCents)}</div>
+          </div>
 
-    if (itemsElement) itemsElement.textContent = `$${formatCurrency(productPriceCents)}`;
-    if (shippingElement) shippingElement.textContent = `$${formatCurrency(shippingPriceCents)}`;
-    if (subtotalElement) subtotalElement.textContent = `$${formatCurrency(totalBeforeTaxCents)}`;
-    if (taxElement) taxElement.textContent = `$${formatCurrency(taxCents)}`;
-    if (totalElement) totalElement.textContent = `$${formatCurrency(totalCents)}`;
+          <div class="payment-summary-row">
+            <div>Shipping &amp; handling:</div>
+            <div class="payment-summary-money">${formatCurrency(shippingPriceCents)}</div>
+          </div>
+
+          <div class="payment-summary-row subtotal-row">
+            <div>Total before tax:</div>
+            <div class="payment-summary-money">${formatCurrency(totalBeforeTaxCents)}</div>
+          </div>
+
+          <div class="payment-summary-row">
+            <div>Estimated tax (10%):</div>
+            <div class="payment-summary-money">${formatCurrency(taxCents)}</div>
+          </div>
+
+          <div class="payment-summary-row total-row">
+            <div>Order total:</div>
+            <div class="payment-summary-money">${formatCurrency(totalCents)}</div>
+          </div>
+
+          <button class="place-order-button button-primary">
+            Place your order
+          </button>`;
+
+    const paymentSummaryElement = document.querySelector('.js-payment-summary');
+    paymentSummaryElement.innerHTML = paymentSummaryHTML;
 }
