@@ -2,18 +2,18 @@ import {calculateCartQuantity, cart, removeFromCart, updateDeliveryOptionsId} fr
 import {products, getProduct} from '../../data/products.js';
 import {formatCurrency} from '../utils/money.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
-import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js'
+import {deliveryOptions, getDeliveryOption , calculateDeliveryDate} from '../../data/deliveryOptions.js'
 import {renderPaymentSummary} from './paymentSummery.js';
+
+
+
 
 function getDeliveryDate(deliveryOptionsId) {
   const option = getDeliveryOption(deliveryOptionsId);
   if (!option) return 'Delivery date: TBD';
+  const deliveryDate = calculateDeliveryDate(deliveryOptionsId);
+  return deliveryDate;
   
-  const today = dayjs();
-  const deliveryDate = today.add(option.deliveryDateDays, 'day');
-  const deliveryDateFormatted = deliveryDate.format('dddd, MMMM D');
-  
-  return `Delivery date: ${deliveryDateFormatted}`;
 }
 function updateCheckoutHeader() {
   const cartQuantity = calculateCartQuantity();
@@ -26,9 +26,7 @@ function deliveryOptionsHtml(productId  , cartItem) {
 
   let html = '';
   deliveryOptions.forEach((option) => {
-    const today = dayjs();
-    const deliveryDate = today.add(option.deliveryDateDays, 'day')
-    const deliveryDateFormatted = deliveryDate.format('dddd, MMMM D');
+    const deliveryDateFormatted = calculateDeliveryDate(option.id);
 
     const priceString = option.priceCents === 0
       ? 'FREE Shipping'
@@ -136,14 +134,9 @@ export function renderCheckoutPage() {
       link.addEventListener('click', () => {
         const productId = link.dataset.productId;
         removeFromCart(productId);
-
-        const container = document.querySelector(
-          `.js-cart-item-container-${productId}`
-        );
-        container.remove();
         
-        // Update the checkout header after deletion
-        updateCheckoutHeader();
+        // Regenerate the entire order summary instead of manipulating the DOM directly
+        renderCheckoutPage();
         renderPaymentSummary();
       });
     });
