@@ -31,11 +31,12 @@ export function getDeliveryOption(deliveryOptionsId){
   return matchingOption || deliveryOptions[0];
 }
 
-export function calculateDeliveryDate(deliveryOptionsId) {
+export function calculateDeliveryDate(deliveryOptionsId, startDate) {
   const option = getDeliveryOption(deliveryOptionsId);
   let remainingDaysToAdd = option.deliveryDateDays;
 
-  let date = dayjs();
+  // Allow tests to provide a fixed start date; default to today
+  let date = startDate ? dayjs(startDate) : dayjs();
   while (remainingDaysToAdd > 0) {
     date = date.add(1, 'day');
     const dayOfWeek = date.day(); // 0 = Sunday, 6 = Saturday
