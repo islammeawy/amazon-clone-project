@@ -80,6 +80,9 @@ export function removeFromCart(productId) {
 }
 
 export function updateDeliveryOptionsId(productId, deliveryOptionsId) {
+  if(deliveryOptionsId !== 1 && deliveryOptionsId !== 2 && deliveryOptionsId !== 3) {
+    return;
+  }
 let matchingItem;
 
 cart.forEach((cartItem) => {

@@ -34,18 +34,33 @@ function deliveryOptionsHtml(productId  , cartItem) {
 
       const isChecked = cartItem.deliveryOptionsId === option.id;
     html += `
-     <div class="delivery-option">
+     <div class="delivery-option
+     js-delivery-option-${productId}
+     js-delivery-option-${option.id}
+    js-delivery-option
+
+     
+     ">
             <input type="radio"
               ${isChecked ? 'checked' : ''}
-              class="delivery-option-input"
+              class="delivery-option-input
+              js-delivery-option-input-${productId}
+              js-delivery-option-input-${option.id}
+              "
               name="delivery-option-${productId}"
               data-product-id="${productId}"
               data-delivery-options-id="${option.id}">
             <div>
-              <div class="delivery-option-date">
+              <div class="delivery-option-date
+              js-delivery-option-input-${productId}
+              js-delivery-option-input-${option.id}
+              ">
                 ${deliveryDateFormatted}
               </div>
-              <div class="delivery-option-price">
+              <div class="delivery-option-price
+              js-delivery-option-input-${productId}
+              js-delivery-option-input-${option.id}
+              ">
                 ${priceString} - Shipping
               </div>
             </div>
@@ -85,10 +100,14 @@ export function renderCheckoutPage() {
             src="${matchingProduct.image}">
 
           <div class="cart-item-details">
-            <div class="product-name">
+            <div class="product-name
+           js-product-name-${matchingProduct.id}
+            ">
               ${matchingProduct.name}
             </div>
-            <div class="product-price">
+            <div class="product-price
+            js-product-price-${matchingProduct.id}
+            ">
               $${formatCurrency(matchingProduct.priceCents)}
             </div>
             <div class="product-quantity
