@@ -1,4 +1,4 @@
-import {calculateCartQuantity, cart, removeFromCart, updateDeliveryOptionsId} from '../../data/cart.js';
+import {cart} from '../../data/cart-oop.js';
 import {products, getProduct} from '../../data/products.js';
 import formatCurrency from '../utils/money.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
@@ -16,7 +16,7 @@ function getDeliveryDate(deliveryOptionsId) {
   
 }
 function updateCheckoutHeader() {
-  const cartQuantity = calculateCartQuantity();
+  const cartQuantity = cart.calculateCartQuantity();
   
   document.querySelector('.checkout-header-middle-section').innerHTML = `Checkout (<a class="return-to-home-link"
             href="amazon.html">${cartQuantity} items</a>)`;
@@ -82,7 +82,7 @@ export function renderCheckoutPage() {
   updateCheckoutHeader();
   let cartSummaryHTML = '';
 
-  cart.forEach((cartItem) => {
+  cart.cartItems.forEach((cartItem) => {
     const productId = cartItem.productId;
     const matchingProduct = getProduct(productId);
 
@@ -157,7 +157,7 @@ export function renderCheckoutPage() {
     .forEach((link) => {
       link.addEventListener('click', () => {
         const productId = link.dataset.productId;
-        removeFromCart(productId);
+        cart.removeFromCart(productId);
         
         // Regenerate the entire order summary instead of manipulating the DOM directly
         renderCheckoutPage();
@@ -192,11 +192,11 @@ export function renderCheckoutPage() {
         }
         
         // Update the cart
-        const cartItem = cart.find(item => item.productId === productId);
+        const cartItem = cart.cartItems.find(item => item.productId === productId);
         if (cartItem) {
           cartItem.quantity = newQuantity;
           // Save to localStorage
-          localStorage.setItem('cart', JSON.stringify(cart));
+          cart.saveToStorage();
           
           // Update the quantity label
           document.querySelector(`.js-cart-item-container-${productId} .quantity-label`).textContent = newQuantity;
@@ -226,7 +226,7 @@ export function renderCheckoutPage() {
         const productId = radioButton.dataset.productId;
         const deliveryOptionsId = parseInt(radioButton.dataset.deliveryOptionsId, 10);
         
-        updateDeliveryOptionsId(productId, deliveryOptionsId);
+        cart.updateDeliveryOptionsId(productId, deliveryOptionsId);
         
         // Update the delivery date display
         const deliveryDateElement = document.querySelector(`.js-cart-item-container-${productId} .delivery-date`);
