@@ -3,7 +3,7 @@ function Cart(){
   const cart = {
     cartItems : undefined ,
     
-  loadFromStorage () {
+    loadFromStorage () {
     this.cartItems = JSON.parse(localStorage.getItem('cart-oop'));
   
   if (!this.cartItems) {

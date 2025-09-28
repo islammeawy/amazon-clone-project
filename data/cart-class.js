@@ -8,7 +8,7 @@ this.loadFromStorage();
 }
 
 
-#loadFromStorage () {
+loadFromStorage () {
     this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey));
 
   if (!this.cartItems) {
@@ -25,7 +25,7 @@ this.loadFromStorage();
   
   }
       saveToStorage() {
-       localStorage.setItem('cart-oop', JSON.stringify(this.cartItems));
+       localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
       }
        addToCart(productId, productQuantity) {
     // Validate inputs
@@ -106,7 +106,7 @@ this.loadFromStorage();
 }
 
 const cart = new Cart('cart-oop');
-const businessCart = new Cart('busnisse-cart');
+const businessCart = new Cart('business-cart');
 
 
 console.log(cart);
