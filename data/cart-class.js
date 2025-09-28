@@ -1,16 +1,16 @@
 class Cart{
 cartItems;
-localStorage;
+#localStorageKey;
 
-constructor(localStorage){
-this.localStorage = localStorage;
+constructor(localStorageKey){
+this.#localStorageKey = localStorageKey;
 this.loadFromStorage();
 }
 
 
-loadFromStorage () {
-    this.cartItems = JSON.parse(this.localStorage.getItem('cart-oop'));
-  
+#loadFromStorage () {
+    this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey));
+
   if (!this.cartItems) {
    this.cartItems = [{
       productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
