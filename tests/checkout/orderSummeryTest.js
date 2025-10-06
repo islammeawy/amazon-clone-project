@@ -49,9 +49,7 @@ describe('test suite: render order summary', () => {
   
     })
   it('removes the product from the cart' , () => {
-    // Reset cart state for this test
-    cart.cartItems = [];
-    
+    // Prepare DOM and render with fixture data
     document.querySelector('.js-test-container').innerHTML = `
     <div class="checkout-header-middle-section"></div>
     <div class="js-order-summary"></div>
@@ -70,10 +68,10 @@ describe('test suite: render order summary', () => {
     expect(cart.cartItems[0].productId).toEqual(productID2);
     expect(
       document.querySelector(`.js-product-name-${productID2}`).innerText
-    ).toEqual('Black and Gray Athletic Cotton Socks - 6 Pairs');
+    ).toEqual('Intermediate Size Basketball');
     expect(
       document.querySelector(`.js-product-price-${productID2}`).innerText
-    ).toEqual('$12.99');
+    ).toEqual('$20.95');
     expect(
       document.querySelector(`.js-product-quantity-${productID2}`).innerText
     ).toEqual('Quantity: 1');
@@ -85,7 +83,14 @@ describe('test suite: render order summary', () => {
     document.querySelector('.js-test-container').innerHTML = '';
   });
   it('updates the delivery options' , () => {
-   
+    // Prepare DOM and render with fixture data
+    document.querySelector('.js-test-container').innerHTML = `
+    <div class="checkout-header-middle-section"></div>
+    <div class="js-order-summary"></div>
+    <div class="js-payment-summary"></div>`
+    
+    renderCheckoutPage();
+
     document.querySelector('.js-delivery-option-input-3').click();
     expect(
       document.querySelector(`.js-delivery-option-input-${productID1}-3`).checked

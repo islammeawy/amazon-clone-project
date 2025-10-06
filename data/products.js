@@ -12,7 +12,7 @@ export function getProduct(productId){
   return matchingProduct;
 }
 
-class Products {
+export class Product {
   id;
   image;
   name
@@ -28,20 +28,54 @@ class Products {
     this.priceCents = productDetails.priceCents;
   }
 
-  get startUrl(){
+  getStarsUrl(){
     const stars = Math.round(this.rating.stars * 10);
     return `images/ratings/rating-${stars}.png`;
   }
 
-  get priceDollars(){
+  getPrice(){
     return  `$${formatCurrency(this.priceCents)}`
   }
-  extraInfoHtml(){
+  extraInfoHTML(){
     return ''
+  }
+
+  // Backwards compatibility for existing UI code
+  get startUrl(){
+    return this.getStarsUrl();
+  }
+  get priceDollars(){
+    return this.getPrice();
+  }
+  extraInfoHtml(){
+    return this.extraInfoHTML();
   }
 }
 
-const product1 = new Products({
+
+export class Appliance extends Product {
+  instructionsLink;
+  warrantyLink;
+
+
+
+  constructor (productDetails){
+    super(productDetails);
+    this.instructionsLink = productDetails.instructionsLink;
+    this.warrantyLink = productDetails.warrantyLink;
+  }
+
+  extraInfoHTML(){
+    return `
+    <a href="${this.instructionsLink}" target="_blank">Instructions</a>
+    <br>
+    <a href="${this.warrantyLink}" target="_blank">Warranty</a>
+    `
+  }
+
+}
+
+const product1 = new Product({
   id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
   image: "images/products/athletic-cotton-socks-6-pairs.jpg",
   name: "Black and Gray Athletic Cotton Socks - 6 Pairs",
@@ -57,7 +91,7 @@ const product1 = new Products({
   ]
 });
 
-class Clothing extends Products {
+export class Clothing extends Product {
   sizeChartLink;
 
   constructor (productDetails){
@@ -65,10 +99,9 @@ class Clothing extends Products {
     this.sizeChartLink = productDetails.sizeChartLink;
   }
 
-  extraInfoHtml(){
+  extraInfoHTML(){
     return `
-
-    <a href="${this.sizeChartLink} " target="_blank">View Size Chart</a>
+    <a href="${this.sizeChartLink}" target="_blank">Size chart</a>
     `
   }
 }
@@ -151,7 +184,10 @@ export const products = [
       "toaster",
       "kitchen",
       "appliances"
-    ]
+    ],
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png"
   },
   {
     id: "3ebe75dc-64d2-4137-8860-1f5a963e534b",
@@ -770,8 +806,12 @@ export const products = [
   (product) => {
     if (product.type === 'clothing') {
       return new Clothing(product);
-    } else {
-      return new Products(product);
+    }
+    else if (product.type === 'appliance') {
+      return new Appliance(product);
+    }
+     else {
+      return new Product(product);
     }
   }
 );

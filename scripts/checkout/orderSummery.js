@@ -46,6 +46,7 @@ function deliveryOptionsHtml(productId  , cartItem) {
               class="delivery-option-input
               js-delivery-option-input-${productId}
               js-delivery-option-input-${option.id}
+              js-delivery-option-input-${productId}-${option.id}
               "
               name="delivery-option-${productId}"
               data-product-id="${productId}"
@@ -75,6 +76,10 @@ function deliveryOptionsHtml(productId  , cartItem) {
 }
 
 export function renderCheckoutPage() {
+  // Ensure we render using the latest cart from storage (tests rely on this)
+  if (typeof cart.loadFromStorage === 'function') {
+    cart.loadFromStorage();
+  }
   console.log('renderCheckoutPage called');
   console.log('Cart:', cart);
   console.log('Products:', products);
@@ -110,10 +115,8 @@ export function renderCheckoutPage() {
             ">
               $${formatCurrency(matchingProduct.priceCents)}
             </div>
-            <div class="product-quantity
-            js-product-quantity-${matchingProduct.id}
-            ">
-              <span>
+            <div class="product-quantity">
+              <span class="js-product-quantity-${matchingProduct.id}">
                 Quantity: <span class="quantity-label">${cartItem.quantity}</span>
               </span>
               <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchingProduct.id}">
