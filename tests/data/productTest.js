@@ -1,8 +1,13 @@
-import {Product, Clothing, Appliance} from '../../data/products.js';
+import {Product, Clothing, Appliance , loadProducts} from '../../data/products.js';
+
 
 describe('Product Class Tests', () => {
    let product;
 
+
+   beforeAll((done) => {
+     loadProducts().then(() => done());
+   });
   beforeEach(() => {
     product = new Product({
       id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
