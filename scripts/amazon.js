@@ -1,7 +1,14 @@
 import {cart} from '../data/cart-class.js';
-import {products} from '../data/products.js';
-import formatCurrency from './utils/money.js';
+import { loadProducts, products } from '../data/products.js';
 
+async function renderPage() {
+  await loadProducts();
+  renderProductsGrid();
+}
+
+renderPage();
+
+function renderProductsGrid() {
 let productsHTML = '';
 products.forEach((product) => {
   productsHTML += `
@@ -107,6 +114,4 @@ document.querySelectorAll('.js-add-to-cart')
       }, 2000);
     });
   });
-
-// Optional: If you want to update cart quantity on page load
-updateCartQuantity();
+}
