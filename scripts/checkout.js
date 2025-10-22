@@ -6,9 +6,9 @@ import '../data/products.js'
 import { loadProducts } from "../data/products.js";
 // import '../data/backend-practice.js';
 
-
-loadProducts(() => {
+Promise.all([
+ loadProducts()
+]).then(() => {
   renderCheckoutPage();
-  renderPaymentSummary(); 
-}
-);
+  renderPaymentSummary();
+});

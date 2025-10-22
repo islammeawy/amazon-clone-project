@@ -93,6 +93,7 @@ document.querySelectorAll('.js-add-to-cart')
       }
       
       cart.addToCart(productId, productQuantity);
+      
       updateCartQuantity();
       
       // Show checkmark animation

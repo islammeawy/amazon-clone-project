@@ -1,5 +1,7 @@
 import formatCurrency from "../scripts/utils/money.js";
 
+
+
 export function getProduct(productId){
   let matchingProduct;
 
@@ -93,21 +95,22 @@ export class Clothing extends Product {
 export let products = [];
 
 export async function loadProducts() {
-  try {
-    const response = await fetch('https://supersimplebackend.dev/products');
-    const productsData = await response.json();
-
-    products = productsData.map((productDetails) => {
-      if (productDetails.type === 'clothing') {
-        return new Clothing(productDetails);
+ const promise = fetch('https://supersimplebackend.dev/products').then((response) => {
+    return response.json();
+  }).then((productsData) => {
+    productsData.forEach((productData) => {
+      let product;
+      if (productData.type === 'appliance') {
+        product = new Appliance(productData);
+      } else if (productData.type === 'clothing') {
+        product = new Clothing(productData);
+      } else {
+        product = new Product(productData);
       }
-      if (productDetails.type === 'appliance') {
-        return new Appliance(productDetails);
-      }
-      return new Product(productDetails);
+      products.push(product);
     });
+  });
 
-  } catch (error) {
-    console.log('Error loading products:', error);
-  }
+  return promise;
 }
+loadProducts().then;
