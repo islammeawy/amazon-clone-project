@@ -6,9 +6,16 @@ import '../data/products.js'
 import { loadProducts } from "../data/products.js";
 // import '../data/backend-practice.js';
 
-Promise.all([
- loadProducts()
-]).then(() => {
+async function  loadPage(){
+
+  try {
+    await loadProducts();
+  }
+  catch (error){
+    console.error('Error loading products:', error);
+    return;
+  }
   renderCheckoutPage();
   renderPaymentSummary();
-});
+}
+loadPage();
