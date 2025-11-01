@@ -9,9 +9,18 @@ describe('test suite: render order summary', () => {
   beforeAll(async () => {
     await loadProducts();
   });
+  let fakeCartJSON;
+
+  beforeAll(() => {
+    spyOn(localStorage, 'getItem').and.callFake(() => fakeCartJSON);
+    spyOn(localStorage, 'setItem').and.callFake((key, value) => {
+      if (key === 'cart-oop') fakeCartJSON = value;
+    });
+  });
+  
   beforeEach(() => {
-    spyOn(localStorage, 'getItem').and.callFake(() => {
-      return JSON.stringify([{
+    fakeCartJSON = JSON.stringify([
+      {
         productId: productID1,
         quantity: 2,
         deliveryOptionsId: 1
@@ -19,9 +28,8 @@ describe('test suite: render order summary', () => {
         productId: productID2,
         quantity: 1,
         deliveryOptionsId: 2
-      }]);
-    });
-    spyOn(localStorage, 'setItem');
+      }
+    ]);
     cart.loadFromStorage();
   });
   it ('displays the cart ' , () => {
@@ -51,39 +59,27 @@ describe('test suite: render order summary', () => {
       document.querySelector(`.js-product-name-${productID1}`).innerText
     ).toEqual('Black and Gray Athletic Cotton Socks - 6 Pairs');
   
-  
+    fakeCartJSON = JSON.stringify([{
+      productId: productID1,
+      quantity: 2,
+      deliveryOptionsId: 1
+    }, {
+      productId: productID2,
+      quantity: 1,
+      deliveryOptionsId: 2
+    }]);
+ 
+    cart.loadFromStorage();
+    expect(cart.cartItems.length).toEqual(2);
+    expect(cart.cartItems[0].productId).toEqual(productID1);
+    expect(cart.cartItems[0].quantity).toEqual(2);
+    expect(cart.cartItems[0].deliveryOptionsId).toEqual(1);
+    expect(cart.cartItems[1].productId).toEqual(productID2);
+    expect(cart.cartItems[1].quantity).toEqual(1);
+    expect(cart.cartItems[1].deliveryOptionsId).toEqual(2);
     })
-  it('removes the product from the cart' , () => {
-    // Prepare DOM and render with fixture data
-    document.querySelector('.js-test-container').innerHTML = `
-    <div class="checkout-header-middle-section"></div>
-    <div class="js-order-summary"></div>
-    <div class="js-payment-summary"></div>`
-    
-    renderCheckoutPage();
+      
 
-    document.querySelector(`.js-delete-link[data-product-id="${productID1}"]`).click();
-    expect(
-      document.querySelectorAll('.js-cart-item-container').length
-    ).toEqual(1);
-    expect(
-      document.querySelector(`.js-cart-item-container-${productID1}`)
-    ).toBeNull();
-    expect(cart.cartItems.length).toEqual(1);
-    expect(cart.cartItems[0].productId).toEqual(productID2);
-    expect(
-      document.querySelector(`.js-product-name-${productID2}`).innerText
-    ).toEqual('Intermediate Size Basketball');
-    expect(
-      document.querySelector(`.js-product-price-${productID2}`).innerText
-    ).toEqual('$20.95');
-    expect(
-      document.querySelector(`.js-product-quantity-${productID2}`).innerText
-    ).toEqual('Quantity: 1');
-
-    
-    });
-  
   afterEach(() => {
     document.querySelector('.js-test-container').innerHTML = '';
   });

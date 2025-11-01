@@ -2,6 +2,12 @@ export let cart;
 
 loadFromStorage();
 
+export async function loadCartfetch() {
+  const response = await fetch('https://supersimplebackend.dev/cart');
+  const text = await response.text();
+  console.log( text);
+  return text;
+}
 
 export function loadFromStorage() {
   cart = JSON.parse(localStorage.getItem('cart'));

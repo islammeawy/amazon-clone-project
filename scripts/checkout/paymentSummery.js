@@ -42,7 +42,7 @@ export function renderPaymentSummary() {
 
           <div class="payment-summary-row">
             <div>Items (${cart.cartItems.length}):</div>
-            <div class="payment-summary-money">${formatCurrency(productPriceCents)}</div>
+            <div class="payment-summary-money">$${formatCurrency(productPriceCents)}</div>
           </div>
 
           <div class="payment-summary-row">
@@ -50,17 +50,17 @@ export function renderPaymentSummary() {
             <div class="payment-summary-money
             js-payment-summary-shipping
             
-            ">${formatCurrency(shippingPriceCents)}</div>
+            ">$${formatCurrency(shippingPriceCents)}</div>
           </div>
 
           <div class="payment-summary-row subtotal-row">
             <div>Total before tax:</div>
-            <div class="payment-summary-money">${formatCurrency(totalBeforeTaxCents)}</div>
+            <div class="payment-summary-money">$${formatCurrency(totalBeforeTaxCents)}</div>
           </div>
 
           <div class="payment-summary-row">
             <div>Estimated tax (10%):</div>
-            <div class="payment-summary-money">${formatCurrency(taxCents)}</div>
+            <div class="payment-summary-money">$${formatCurrency(taxCents)}</div>
           </div>
 
           <div class="payment-summary-row total-row">
@@ -68,7 +68,7 @@ export function renderPaymentSummary() {
             <div class="payment-summary-money
             js-payment-summary-total
             
-            ">${formatCurrency(totalCents)}</div>
+            ">$${formatCurrency(totalCents)}</div>
           </div>
 
           <button class="place-order-button button-primary
@@ -87,14 +87,16 @@ export function renderPaymentSummary() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          cartItems: cart
+          cartItems: cart.cartItems
         })
       });
       const orderData = await response.json();  
       console.log('Order placed successfully:', orderData);
-      window.location.href = `order-confirmation.html?orderId=${orderData.id}`;
 
       addOrder(orderData);
+      console.log(orderData);
+      
+      window.location.href = `orders.html`;
       }catch (error) {
         console.error('Error placing order:', error);
       }

@@ -4,12 +4,17 @@ import  '../data/cart-class.js';
 import '../data/car.js'
 import '../data/products.js'
 import { loadProducts } from "../data/products.js";
-// import '../data/backend-practice.js';
+import { loadCartfetch } from "../data/cart.js";
+
+
 
 async function  loadPage(){
 
   try {
-    await loadProducts();
+    await Promise.all([
+      loadProducts(),
+      loadCartfetch()
+    ]);
   }
   catch (error){
     console.error('Error loading products:', error);

@@ -1,7 +1,6 @@
 import {cart} from '../../data/cart-oop.js';
 import {products, getProduct} from '../../data/products.js';
 import formatCurrency from '../utils/money.js';
-import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import {deliveryOptions, getDeliveryOption , calculateDeliveryDate} from '../../data/deliveryOptions.js'
 import {renderPaymentSummary} from './paymentSummery.js';
 
@@ -76,10 +75,7 @@ function deliveryOptionsHtml(productId  , cartItem) {
 }
 
 export function renderCheckoutPage() {
-  // Ensure we render using the latest cart from storage (tests rely on this)
-  if (typeof cart.loadFromStorage === 'function') {
-    cart.loadFromStorage();
-  }
+  // Only render, do not reload from storage
   console.log('renderCheckoutPage called');
   console.log('Cart:', cart);
   console.log('Products:', products);
